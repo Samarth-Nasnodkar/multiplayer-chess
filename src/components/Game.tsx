@@ -2,26 +2,29 @@ import React from 'react';
 import { useState } from 'react';
 import '../styles/Game.css';
 import Board from '../assets/images/board.svg';
-import Pawn from '../assets/images/pieces/pawn-w.svg';
+import BoardTile from './BoardTile';
 
 const Game = () => {
   const [board, setBoard] = useState([
-    ['R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'],
-    ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'],
+    ['Rb', 'Nb', 'Bb', 'Qb', 'Kb', 'Bb', 'Nb', 'Rb'],
+    ['Pb', 'Pb', 'Pb', 'Pb', 'Pb', 'Pb', 'Pb', 'Pb'],
     ['.', '.', '.', '.', '.', '.', '.', '.'],
     ['.', '.', '.', '.', '.', '.', '.', '.'],
     ['.', '.', '.', '.', '.', '.', '.', '.'],
     ['.', '.', '.', '.', '.', '.', '.', '.'],
-    ['P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'],
-    ['R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'],
+    ['Pw', 'Pw', 'Pw', 'Pw', 'Pw', 'Pw', 'Pw', 'Pw'],
+    ['Rw', 'Nw', 'Bw', 'Qw', 'Kw', 'Bw', 'Nw', 'Rw'],
   ]);
   return (
     <div className='game'>
-      <div className="board">
-        <img src={Board} alt='board'/>
-      </div>
-      <div className="piece">
-        <img src={Pawn} alt='board'/>
+      <div className="board">  
+        {board.map((row, i) => {
+          let light = i % 2 === 0;
+          return row.map((piece, j) => {
+            light = !light;
+            return <BoardTile pieceName={piece} key={i * 8 + j} bg={light}></BoardTile>
+          });
+        })}
       </div>
     </div>
   );

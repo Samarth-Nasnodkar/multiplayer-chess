@@ -1,0 +1,11 @@
+.board-tile {
+  background-color: 'red';
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.board-tile img {
+  height: 80%;
+  width: 80%;
+}

@@ -1,25 +1,16 @@
 .game {
   display: flex;
   flex-direction: row;
-  height: 100%;
-  width: 100%;
   justify-content: flex-start;
   align-items: center;
-  padding-left: 50px;
+  height: 100%;
+  width: 100%;
 }
 
 .board {
-  z-index: 1;
-}
-
-.piece {
-  position: absolute;
-  top: 20px;
-  left: 50px;
-  z-index: 2;
-}
-
-.piece img {
-  width: 96px;
-  height: 96px;
+  margin-left: 50px;
+  border: 2px solid black;
+  display: grid;
+  grid-template-columns: repeat(8, 96px);
+  grid-template-rows: repeat(8, 96px);
 }
