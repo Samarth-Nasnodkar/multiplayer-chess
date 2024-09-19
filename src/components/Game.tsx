@@ -4,7 +4,12 @@ import BoardTile from './BoardTile';
 
 interface GameProps {
   board: string[][],
-  getPieceName: (id: number) => string,
+  utils: {
+    getColName: (index: number) => string,
+    getRowName: (index: number) => string,
+    getPieceSide: (piece: string) => string,
+    getPieceName: (id: number) => string,
+  }
 };
 
 const Game = (props: GameProps) => {
@@ -13,10 +18,10 @@ const Game = (props: GameProps) => {
       <div className="board">  
         {props.board.map((row, i) => {
           let light = i % 2 === 0;
-          return row.map((piece, j) => {
+          return row.map((_, j) => {
             const elemId = i * 8 + j;
             light = !light;
-            return <BoardTile id={elemId} getPieceName={props.getPieceName} key={elemId} bg={light}></BoardTile>
+            return <BoardTile id={elemId} utils={props.utils} key={elemId} bg={light}></BoardTile>
           });
         })}
       </div>
