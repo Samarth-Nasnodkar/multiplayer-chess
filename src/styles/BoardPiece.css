@@ -1,0 +1,15 @@
+.board-piece {
+  margin: 0;
+  padding: 0;
+  height: 80%;
+  width: 80%;
+  cursor: pointer;
+  &:active {
+    cursor: grabbing;
+  }
+}
+
+.board-piece img {
+  height: 100%;
+  width: 100%;
+}

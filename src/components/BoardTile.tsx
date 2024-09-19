@@ -1,39 +1,50 @@
 import React, { useEffect, useState } from 'react';
 import '../styles/BoardTile.css';
+import { useDroppable } from '@dnd-kit/core';
+import BoardPiece from './BoardPiece';
 
 interface BoardTileProps {
-  pieceName: string,
+  id: number,
+  getPieceName: (id: number) => string,
   bg: boolean,
 };
 
 const BoardTile = (props: BoardTileProps) => {
   let [tilePiece, setTilePiece] = useState('');
+  const {isOver, setNodeRef} = useDroppable({
+    id: props.id.toString(),
+  });
   useEffect(() => {
-    if (props.pieceName === '.') return;
+    const pieceName = props.getPieceName(props.id);
+    if (pieceName === '.') return;
     let pname = '';
-    if (props.pieceName[0] == 'P') {
+    if (pieceName[0] === 'P') {
       pname = 'pawn';
-    } else if (props.pieceName[0] == 'R') {
+    } else if (pieceName[0] === 'R') {
       pname = 'rook';
-    } else if (props.pieceName[0] == 'N') {
+    } else if (pieceName[0] === 'N') {
       pname = 'knight';
-    } else if (props.pieceName[0] == 'B') {
+    } else if (pieceName[0] === 'B') {
       pname = 'bishop';
-    } else if (props.pieceName[0] == 'K') {
+    } else if (pieceName[0] === 'K') {
       pname = 'king';
-    } else if (props.pieceName[0] == 'Q') {
+    } else if (pieceName[0] === 'Q') {
       pname = 'queen';
     }
-    pname += '-' + props.pieceName[1];
+    pname += '-' + pieceName[1];
     const importedIcon = import(`../assets/images/pieces/${pname}.svg`);
     importedIcon.then((icon) => {
       setTilePiece(icon.default);
     });
-  }, []);
+  }, [props]);
   const bgColor = props.bg ? '#779556': '#ebecd0';
+  const style = {
+    border: isOver ? '3px solid green' : undefined,
+    backgroundColor: bgColor,
+  };
   return (
-    <div className='board-tile' style={{backgroundColor: bgColor}}>
-      {props.pieceName !== '.' && <img alt='piece' src={tilePiece}></img>}
+    <div ref={setNodeRef} className='board-tile' style={style}>
+      {props.getPieceName(props.id) !== '.' && <BoardPiece id={props.id.toString()} pieceSrc={tilePiece}/>}
     </div>
   );
 }
