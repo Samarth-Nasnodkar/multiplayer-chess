@@ -26,6 +26,7 @@ function App() {
   }
 
   const getPieceSide = (piece: string) => {
+    if (piece === '.') return pieceSide.empty;
     return piece[1] === 'w' ? pieceSide.white : pieceSide.black;
   }
 

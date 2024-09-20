@@ -24,7 +24,7 @@ const BoardPiece = (props: BoardPieceProps) => {
       value: {
         position: {
           row: 8 - Math.floor(Number(props.id) / 8), 
-          col: Number(props.id) % 8,
+          col: 1 + (Number(props.id) % 8),
         },
         pieceType: props.pieceType,
         side: props.utils.getPieceSide(props.utils.getPieceName(Number(props.id))),

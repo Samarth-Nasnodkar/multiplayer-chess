@@ -24,7 +24,7 @@ const BoardTile = (props: BoardTileProps) => {
     pieceType: props.utils.getPieceName(props.id),
     position: {
       row: 8 - Math.floor(props.id / 8),
-      col: props.id % 8,
+      col: 1 + (props.id % 8),
     }
   } as tileData;
   const {active, isOver, setNodeRef} = useDroppable({
