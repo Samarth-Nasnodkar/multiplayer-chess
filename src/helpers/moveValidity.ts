@@ -39,18 +39,18 @@ const checkVertiMoveValidity = (board: string[][], col: number, rowFrom: number,
 };
 
 const checkMoveValidity = (board: string[][], active: pieceData, over: tileData) => {
-  console.log('active = ', active);
-  console.log('over = ', over);
   if (active.pieceType === '') return false;
   if (over === undefined) return false;
   if (active.position.row === over.position.row && active.position.col === over.position.col) return false;
 
-  const activeData = board[8 - active.position.row][active.position.col - 1];
+  // const activeData = board[8 - active.position.row][active.position.col - 1];
   const overData = board[8 - over.position.row][over.position.col - 1];
 
   if (active.pieceType === 'pawn') {
-    if (overData !== '.') return false;
     if (active.side === pieceSide.white) {
+      if (overData !== '.') {
+        return over.position.row === active.position.row + 1 && Math.abs(active.position.col - over.position.col) === 1;
+      }
       if (active.position.row === 2) {
         return (
           active.position.row + 2 === over.position.row 
@@ -60,6 +60,9 @@ const checkMoveValidity = (board: string[][], active: pieceData, over: tileData)
       }
       return active.position.col === over.position.col 
               && active.position.row + 1 === over.position.row;
+    }
+    if (overData !== '.') {
+      return over.position.row === active.position.row - 1 && Math.abs(active.position.col - over.position.col) === 1;
     }
     if (active.position.row === 7) {
       return (
@@ -97,7 +100,7 @@ const checkMoveValidity = (board: string[][], active: pieceData, over: tileData)
       (
         active.position.col === over.position.col
         &&
-        checkVertiMoveValidity(board, active.position.col, active.position.col, over.position.col)
+        checkVertiMoveValidity(board, active.position.col, active.position.row, over.position.row)
       )
     ) || (
       Math.abs(active.position.row - over.position.row) === Math.abs(active.position.col - over.position.col)
@@ -105,10 +108,23 @@ const checkMoveValidity = (board: string[][], active: pieceData, over: tileData)
       checkDiagMoveValidity(board, active.position.row, active.position.col, over.position.row, over.position.col)
     );
   } else if (active.pieceType === 'king') {
-    return Math.abs(active.position.row - over.position.row) <= 1 && Math.abs(active.position.col - over.position.col) <= 1;
+    return (
+      Math.abs(active.position.row - over.position.row) <= 1 
+      && 
+      Math.abs(active.position.col - over.position.col) <= 1
+    );
   } else if (active.pieceType === 'knight') {
-    return (Math.abs(active.position.row - over.position.row) === 2 && Math.abs(active.position.col - over.position.col) === 1) 
-    || (Math.abs(active.position.row - over.position.row) === 1 && Math.abs(active.position.col - over.position.col) === 2);
+    return (
+      Math.abs(active.position.row - over.position.row) === 2 
+      && 
+      Math.abs(active.position.col - over.position.col) === 1
+    ) 
+    || 
+    (
+      Math.abs(active.position.row - over.position.row) === 1 
+      && 
+      Math.abs(active.position.col - over.position.col) === 2
+    );
   }
 
   return false;

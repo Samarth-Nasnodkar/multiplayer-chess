@@ -1,9 +1,14 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import './App.css';
 import Game from './components/Game';
 import { closestCorners, DndContext, DragEndEvent } from '@dnd-kit/core';
 import checkMoveValidity from './helpers/moveValidity';
 import pieceSide from './helpers/pieceSide';
+import Timer from './components/Timer';
+
+interface TimerHandle {
+  toggleTimer: () => void;
+}
 
 function App() {
   const [board, setBoard] = useState([
@@ -16,6 +21,25 @@ function App() {
     ['Pw', 'Pw', 'Pw', 'Pw', 'Pw', 'Pw', 'Pw', 'Pw'],
     ['Rw', 'Nw', 'Bw', 'Qw', 'Kw', 'Bw', 'Nw', 'Rw'],
   ]);
+
+  const [playingSide, setPlayingSide] = useState(pieceSide.white);
+  const opponentTimerRef = useRef<TimerHandle>(null);
+  const selfTimerRef = useRef<TimerHandle>(null);
+
+  const rotatePlayingSide = () => {
+    if (playingSide === pieceSide.white) {
+      setPlayingSide(pieceSide.black);
+    } else {
+      setPlayingSide(pieceSide.white);
+    }
+    selfTimerRef.current?.toggleTimer();
+    opponentTimerRef.current?.toggleTimer();
+    console.log("rotated side.");
+  };
+
+  const getPlayingSide = () => {
+    return playingSide;
+  }
 
   const getColName = (index: number) => {
     return 'abcdefgh'[index];
@@ -41,6 +65,8 @@ function App() {
     getRowName,
     getPieceSide,
     getPieceName,
+    rotatePlayingSide,
+    getPlayingSide,
   };
 
   const handleDragEnd = (event: DragEndEvent) => {
@@ -48,8 +74,13 @@ function App() {
 
     if (active.id === over?.id) return;
     
-    const isValidMove = checkMoveValidity(board, active.data.current?.value, over?.data.current?.value) && 
-                        active?.data.current?.value.side !== getPieceSide(getPieceName(over?.id as number));
+    const isValidMove = (
+      getPlayingSide() === active?.data.current?.value.side 
+      &&
+      checkMoveValidity(board, active.data.current?.value, over?.data.current?.value) 
+      && 
+      active?.data.current?.value.side !== getPieceSide(getPieceName(over?.id as number))
+    );
 
     if (!isValidMove) return;
     
@@ -65,12 +96,22 @@ function App() {
     newBoard[ai][aj] = '.';
     newBoard[oi][oj] = piece;
     setBoard(newBoard);
+    rotatePlayingSide();
   };
+
   return (
     <div className="app">
       <DndContext onDragEnd={handleDragEnd} collisionDetection={closestCorners}>
         <Game board={board} utils={utils}/>
       </DndContext>
+      <div className="timers">
+        <div className="timer-opponent">
+          <Timer ref={opponentTimerRef} minutes={10} seconds={0} running={false}/>
+        </div>
+        <div className="timer-self">
+          <Timer ref={selfTimerRef} minutes={10} seconds={0} running={true}/>
+        </div>
+      </div>
     </div>
   );
 }

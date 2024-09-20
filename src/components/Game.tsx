@@ -10,6 +10,8 @@ interface GameProps {
     getRowName: (index: number) => string,
     getPieceSide: (piece: string) => pieceSide,
     getPieceName: (id: number) => string,
+    rotatePlayingSide: () => void,
+    getPlayingSide: () => pieceSide,
   }
 };
 

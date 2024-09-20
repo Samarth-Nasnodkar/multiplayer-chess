@@ -15,6 +15,8 @@ interface BoardTileProps {
     getRowName: (index: number) => string,
     getPieceSide: (piece: string) => pieceSide,
     getPieceName: (id: number) => string,
+    rotatePlayingSide: () => void,
+    getPlayingSide: () => pieceSide,
   }
 };
 
@@ -59,13 +61,18 @@ const BoardTile = (props: BoardTileProps) => {
       setTilePiece(icon.default);
     });
   }, [props]);
-  const bgColor = props.bg ? '#779556': '#ebecd0';
+  const bgColor = props.bg ? '#697565': '#ECDFCC';
   const getTileHighlightColor = () => {
     const p1 = active?.data.current?.value.position;
     const p2 = overData.position;
     if (p1.row === p2.row && p1.col === p2.col) return undefined;
-    const isValidMove = checkMoveValidity(props.board, active?.data.current?.value, overData) 
-                        && active?.data.current?.value.side !== props.utils.getPieceSide(props.utils.getPieceName(props.id));
+    const isValidMove = (
+      props.utils.getPlayingSide() === active?.data.current?.value.side 
+      && 
+      checkMoveValidity(props.board, active?.data.current?.value, overData) 
+      && 
+      active?.data.current?.value.side !== props.utils.getPieceSide(props.utils.getPieceName(props.id))
+    );
     return '4px solid ' + (isValidMove ? 'green' : 'red');
   };
   const style = {

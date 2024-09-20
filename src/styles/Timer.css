@@ -1,0 +1,23 @@
+.timer-body {
+  padding: 20px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  font-family: helvetica;
+}
+
+.timer-big {
+  font-size: 70px;
+  color: #f8f8f8;
+}
+
+.time-seconds {
+  margin-left: 20px;
+}
+
+.timer-small {
+  font-size: 20px;
+  color: #707070;
+}
