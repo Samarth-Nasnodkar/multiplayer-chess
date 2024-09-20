@@ -3,6 +3,7 @@ import './App.css';
 import Game from './components/Game';
 import { closestCorners, DndContext, DragEndEvent } from '@dnd-kit/core';
 import checkMoveValidity from './helpers/moveValidity';
+import pieceSide from './helpers/pieceSide';
 
 function App() {
   const [board, setBoard] = useState([
@@ -25,7 +26,7 @@ function App() {
   }
 
   const getPieceSide = (piece: string) => {
-    return piece[1] === 'w' ? 'white' : 'black';
+    return piece[1] === 'w' ? pieceSide.white : pieceSide.black;
   }
 
   const getPieceName = (id: number) => {
@@ -46,7 +47,8 @@ function App() {
 
     if (active.id === over?.id) return;
     
-    const isValidMove = checkMoveValidity(board, active.data.current?.value, over?.data.current?.value);
+    const isValidMove = checkMoveValidity(board, active.data.current?.value, over?.data.current?.value) && 
+                        active?.data.current?.value.side !== getPieceSide(getPieceName(over?.id as number));
 
     if (!isValidMove) return;
     

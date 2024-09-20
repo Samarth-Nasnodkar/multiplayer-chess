@@ -3,6 +3,7 @@ import '../styles/BoardPiece.css';
 import { useDraggable } from '@dnd-kit/core';
 import { CSS } from '@dnd-kit/utilities';
 import pieceData from '../helpers/pieceData';
+import pieceSide from '../helpers/pieceSide';
 
 interface BoardPieceProps {
   id: string,
@@ -11,7 +12,7 @@ interface BoardPieceProps {
   utils: {
     getColName: (index: number) => string,
     getRowName: (index: number) => string,
-    getPieceSide: (piece: string) => string,
+    getPieceSide: (piece: string) => pieceSide,
     getPieceName: (id: number) => string,
   }
 };

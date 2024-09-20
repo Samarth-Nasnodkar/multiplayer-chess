@@ -1,13 +1,14 @@
 import pieceData from "./pieceData";
+import pieceSide from "./pieceSide";
 import tileData from "./tileData";
 
 const checkMoveValidity = (board: string[][], active: pieceData, over: tileData) => {
   if (active.pieceType === '') return false;
   if (over === undefined) return false;
   if (active.position.row === over.position.row && active.position.col === over.position.col) return false;
-  
+
   if (active.pieceType === 'pawn') {
-    if (active.side === 'white') {
+    if (active.side === pieceSide.white) {
       if (active.position.row === 2) {
         return (active.position.row + 2 === over.position.row || active.position.row + 1 === over.position.row) && active.position.col === over.position.col;
       }

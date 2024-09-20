@@ -4,6 +4,7 @@ import { useDroppable } from '@dnd-kit/core';
 import BoardPiece from './BoardPiece';
 import tileData from '../helpers/tileData';
 import checkMoveValidity from '../helpers/moveValidity';
+import pieceSide from '../helpers/pieceSide';
 
 interface BoardTileProps {
   id: number,
@@ -12,7 +13,7 @@ interface BoardTileProps {
   utils: {
     getColName: (index: number) => string,
     getRowName: (index: number) => string,
-    getPieceSide: (piece: string) => string,
+    getPieceSide: (piece: string) => pieceSide,
     getPieceName: (id: number) => string,
   }
 };
@@ -63,7 +64,9 @@ const BoardTile = (props: BoardTileProps) => {
     const p1 = active?.data.current?.value.position;
     const p2 = overData.position;
     if (p1.row === p2.row && p1.col === p2.col) return undefined;
-    return '4px solid ' + (checkMoveValidity(props.board, active?.data.current?.value, overData) ? 'green' : 'red');
+    const isValidMove = checkMoveValidity(props.board, active?.data.current?.value, overData) 
+                        && active?.data.current?.value.side !== props.utils.getPieceSide(props.utils.getPieceName(props.id));
+    return '4px solid ' + (isValidMove ? 'green' : 'red');
   };
   const style = {
     border: isOver ? getTileHighlightColor() : undefined,

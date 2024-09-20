@@ -1,13 +1,14 @@
 import React from 'react';
 import '../styles/Game.css';
 import BoardTile from './BoardTile';
+import pieceSide from '../helpers/pieceSide';
 
 interface GameProps {
   board: string[][],
   utils: {
     getColName: (index: number) => string,
     getRowName: (index: number) => string,
-    getPieceSide: (piece: string) => string,
+    getPieceSide: (piece: string) => pieceSide,
     getPieceName: (id: number) => string,
   }
 };
