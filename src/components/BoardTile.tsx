@@ -2,10 +2,13 @@ import React, { useEffect, useState } from 'react';
 import '../styles/BoardTile.css';
 import { useDroppable } from '@dnd-kit/core';
 import BoardPiece from './BoardPiece';
+import tileData from '../helpers/tileData';
+import checkMoveValidity from '../helpers/moveValidity';
 
 interface BoardTileProps {
   id: number,
   bg: boolean,
+  board: string[][],
   utils: {
     getColName: (index: number) => string,
     getRowName: (index: number) => string,
@@ -16,14 +19,17 @@ interface BoardTileProps {
 
 const BoardTile = (props: BoardTileProps) => {
   let [tilePiece, setTilePiece] = useState('');
-  const {isOver, setNodeRef} = useDroppable({
+  const overData = {
+    pieceType: props.utils.getPieceName(props.id),
+    position: {
+      row: 8 - Math.floor(props.id / 8),
+      col: props.id % 8,
+    }
+  } as tileData;
+  const {active, isOver, setNodeRef} = useDroppable({
     id: props.id.toString(),
     data: {
-      pieceType: props.utils.getPieceName(props.id),
-      position: {
-        row: 8 - Math.floor(props.id / 8),
-        col: props.id % 8,
-      }
+      value: overData,
     }
   });
   const getPieceType = (pieceName: string) => {
@@ -53,8 +59,14 @@ const BoardTile = (props: BoardTileProps) => {
     });
   }, [props]);
   const bgColor = props.bg ? '#779556': '#ebecd0';
+  const getTileHighlightColor = () => {
+    const p1 = active?.data.current?.value.position;
+    const p2 = overData.position;
+    if (p1.row === p2.row && p1.col === p2.col) return undefined;
+    return '4px solid ' + (checkMoveValidity(props.board, active?.data.current?.value, overData) ? 'green' : 'red');
+  };
   const style = {
-    border: isOver ? '3px solid green' : undefined,
+    border: isOver ? getTileHighlightColor() : undefined,
     backgroundColor: bgColor,
   };
   return (

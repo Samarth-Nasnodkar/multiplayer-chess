@@ -2,6 +2,7 @@ import React from 'react';
 import '../styles/BoardPiece.css';
 import { useDraggable } from '@dnd-kit/core';
 import { CSS } from '@dnd-kit/utilities';
+import pieceData from '../helpers/pieceData';
 
 interface BoardPieceProps {
   id: string,
@@ -19,12 +20,14 @@ const BoardPiece = (props: BoardPieceProps) => {
   const {attributes, listeners, transform, setNodeRef} = useDraggable({
     id: props.id,
     data: {
-      position: {
-        row: 8 - Math.floor(Number(props.id) / 8), 
-        col: Number(props.id) % 8,
-      },
-      pieceType: props.pieceType,
-      side: props.utils.getPieceSide(props.utils.getPieceName(Number(props.id))),
+      value: {
+        position: {
+          row: 8 - Math.floor(Number(props.id) / 8), 
+          col: Number(props.id) % 8,
+        },
+        pieceType: props.pieceType,
+        side: props.utils.getPieceSide(props.utils.getPieceName(Number(props.id))),
+      } as pieceData,
     }
   });
 

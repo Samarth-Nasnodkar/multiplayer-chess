@@ -21,7 +21,7 @@ const Game = (props: GameProps) => {
           return row.map((_, j) => {
             const elemId = i * 8 + j;
             light = !light;
-            return <BoardTile id={elemId} utils={props.utils} key={elemId} bg={light}></BoardTile>
+            return <BoardTile board={props.board} id={elemId} utils={props.utils} key={elemId} bg={light}></BoardTile>
           });
         })}
       </div>
