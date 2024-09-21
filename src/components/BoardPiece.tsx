@@ -4,6 +4,7 @@ import { useDraggable } from '@dnd-kit/core';
 import { CSS } from '@dnd-kit/utilities';
 import pieceData from '../helpers/pieceData';
 import pieceSide from '../helpers/pieceSide';
+import gameStatus from '../helpers/gameStatus';
 
 interface BoardPieceProps {
   id: string,
@@ -16,6 +17,7 @@ interface BoardPieceProps {
     getPieceName: (id: number) => string,
     rotatePlayingSide: () => void,
     getPlayingSide: () => pieceSide,
+    getGameStaus: () => gameStatus,
   }
 };
 

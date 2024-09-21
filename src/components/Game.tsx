@@ -2,6 +2,7 @@ import React from 'react';
 import '../styles/Game.css';
 import BoardTile from './BoardTile';
 import pieceSide from '../helpers/pieceSide';
+import gameStatus from '../helpers/gameStatus';
 
 interface GameProps {
   board: string[][],
@@ -12,6 +13,7 @@ interface GameProps {
     getPieceName: (id: number) => string,
     rotatePlayingSide: () => void,
     getPlayingSide: () => pieceSide,
+    getGameStaus: () => gameStatus,
   }
 };
 

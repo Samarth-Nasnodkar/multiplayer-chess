@@ -15,6 +15,7 @@ import blackQueenImg from './assets/images/pieces/queen-b.svg';
 import blackBishopImg from './assets/images/pieces/bishop-b.svg';
 import blackRookImg from './assets/images/pieces/rook-b.svg';
 import blackKnightImg from './assets/images/pieces/knight-b.svg';
+import gameStatus from './helpers/gameStatus';
 
 
 interface TimerHandle {
@@ -35,6 +36,8 @@ function App() {
 
   const [playingSide, setPlayingSide] = useState(pieceSide.white);
   const [showPromoPopup, setShowPromoPopup] = useState(false);
+  const [pawnPromotionLocation, setPawnPromotionLocation] = useState({row: -1, col: -1});
+  const [status, setStatus] = useState(gameStatus.running);
   const opponentTimerRef = useRef<TimerHandle>(null);
   const selfTimerRef = useRef<TimerHandle>(null);
 
@@ -66,6 +69,10 @@ function App() {
     return piece[1] === 'w' ? pieceSide.white : pieceSide.black;
   }
 
+  const getGameStaus = () => {
+    return status;
+  }
+
   const getPieceName = (id: number) => {
     const i = Math.floor(id / 8);
     const j = id % 8;
@@ -79,6 +86,7 @@ function App() {
     getPieceName,
     rotatePlayingSide,
     getPlayingSide,
+    getGameStaus,
   };
 
   const handleDragEnd = (event: DragEndEvent) => {
@@ -87,6 +95,8 @@ function App() {
     if (active.id === over?.id) return;
     
     const isValidMove = (
+      getGameStaus() === gameStatus.running
+      &&
       getPlayingSide() === active?.data.current?.value.side 
       &&
       checkMoveValidity(board, active.data.current?.value, over?.data.current?.value) 
@@ -111,16 +121,32 @@ function App() {
     setBoard(newBoard);
 
     if (oi === 0 && piece[0] === 'P') {
+      setPawnPromotionLocation({row: oi, col: oj});
       setShowPromoPopup(true);
+      setStatus(gameStatus.paused);
     } else if (oi === 7 && piece[0] === 'P') {
+      setPawnPromotionLocation({row: oi, col: oj});
       setShowPromoPopup(true);
+      setStatus(gameStatus.paused);
     } else {
       rotatePlayingSide();
     }
   };
 
   const choosePromotion = (piece: string) => {
+    if (pawnPromotionLocation.row === -1 || pawnPromotionLocation.col === -1) return;
+    const newBoard = [...board];
+    const row = pawnPromotionLocation.row;
+    const col = pawnPromotionLocation.col;
+    const side = playingSide === pieceSide.white ? 'w' : 'b';
+    if (piece === 'knight') {
+      newBoard[row][col] = 'N' + side;
+    } else {
+      newBoard[row][col] = piece[0].toUpperCase() + side;
+    }
+    setBoard(newBoard);
     setShowPromoPopup(false);
+    setStatus(gameStatus.running);
     rotatePlayingSide();
   };
 
@@ -140,16 +166,16 @@ function App() {
           <div className="promo-popup">
             <div className="promo-popup-content">
               <button className="promo-popup-button" onClick={() => choosePromotion('queen')}>
-                <img src={whiteQueenImg} alt="queen"/>
+                <img src={getPlayingSide() === pieceSide.white ? whiteQueenImg : blackQueenImg} alt="queen"/>
               </button>
               <button className="promo-popup-button" onClick={() => choosePromotion('rook')}>
-                <img src={whiteRookImg} alt="rook"/>
+                <img src={getPlayingSide() === pieceSide.white ? whiteRookImg : blackRookImg} alt="rook"/>
               </button>
               <button className="promo-popup-button" onClick={() => choosePromotion('bishop')}>
-                <img src={whiteBishopImg} alt="bishop"/>
+                <img src={getPlayingSide() === pieceSide.white ? whiteBishopImg : blackBishopImg} alt="bishop"/>
               </button>
               <button className="promo-popup-button" onClick={() => choosePromotion('knight')}>
-                <img src={whiteKnightImg} alt="knight"/>
+                <img src={getPlayingSide() === pieceSide.white ? whiteKnightImg : blackKnightImg} alt="knight"/>
               </button>
             </div>
           </div>

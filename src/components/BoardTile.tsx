@@ -5,6 +5,7 @@ import BoardPiece from './BoardPiece';
 import tileData from '../helpers/tileData';
 import checkMoveValidity from '../helpers/moveValidity';
 import pieceSide from '../helpers/pieceSide';
+import gameStatus from '../helpers/gameStatus';
 
 interface BoardTileProps {
   id: number,
@@ -17,6 +18,7 @@ interface BoardTileProps {
     getPieceName: (id: number) => string,
     rotatePlayingSide: () => void,
     getPlayingSide: () => pieceSide,
+    getGameStaus: () => gameStatus,
   }
 };
 
@@ -67,6 +69,8 @@ const BoardTile = (props: BoardTileProps) => {
     const p2 = overData.position;
     if (p1.row === p2.row && p1.col === p2.col) return undefined;
     const isValidMove = (
+      props.utils.getGameStaus() === gameStatus.running
+      &&
       props.utils.getPlayingSide() === active?.data.current?.value.side 
       && 
       checkMoveValidity(props.board, active?.data.current?.value, overData) 
