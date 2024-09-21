@@ -9,7 +9,7 @@
 
 .board {
   margin-left: 50px;
-  border: 2px solid black;
+  border: 10px solid #3C3D37;
   display: grid;
   grid-template-columns: repeat(8, 96px);
   grid-template-rows: repeat(8, 96px);

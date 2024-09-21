@@ -4,3 +4,42 @@
   justify-content: center;
   align-items: center;
 }
+
+.promo-popup {
+  background-color: #3C3D37;
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
+}
+
+.promo-popup-content {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.promo-popup-button {
+  background-color: #3C3D37;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.promo-popup-button:hover {
+  background-color: #585a52;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition-duration: 200ms;
+}
+
+.promo-popup-button img {
+  width: 70px;
+  height: 70px;
+}
+
+.promo-popup-header {
+  color: white;
+}
