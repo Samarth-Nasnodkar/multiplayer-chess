@@ -6,6 +6,7 @@ import tileData from '../helpers/tileData';
 import checkMoveValidity from '../helpers/moveValidity';
 import pieceSide from '../helpers/pieceSide';
 import gameStatus from '../helpers/gameStatus';
+import isChecked from '../helpers/check';
 
 interface BoardTileProps {
   id: number,
@@ -63,7 +64,7 @@ const BoardTile = (props: BoardTileProps) => {
       setTilePiece(icon.default);
     });
   }, [props]);
-  const bgColor = props.bg ? '#697565': '#ECDFCC';
+  let bgColor = props.bg ? '#697565': '#ECDFCC';
   const getTileHighlightColor = () => {
     const p1 = active?.data.current?.value.position;
     const p2 = overData.position;
@@ -79,6 +80,11 @@ const BoardTile = (props: BoardTileProps) => {
     );
     return '4px solid ' + (isValidMove ? 'green' : 'red');
   };
+  if (props.utils.getPieceName(props.id)[0] === 'K') {
+    if (isChecked(Math.floor(props.id / 8), props.id % 8, props.board, props.utils.getPieceSide(props.utils.getPieceName(props.id)))) {
+      bgColor = '#FF0000';
+    }
+  }
   const style = {
     border: isOver ? getTileHighlightColor() : undefined,
     backgroundColor: bgColor,
