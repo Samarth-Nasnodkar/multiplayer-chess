@@ -233,6 +233,24 @@ function App() {
 
   return (
     <div className="app">
+      <div className="popup-wrapper" style={{display: showPromoPopup ? undefined : 'none', position: 'absolute', top: `${pawnPromotionLocation.row * 96 + 40}px`, left: `${pawnPromotionLocation.col * 96 + 60}px`, zIndex: 10, transform: 'translate(-50%, -50%)'}}>
+        <div className="promo-popup">
+          <div className="promo-popup-content">
+            <button className="promo-popup-button" onClick={() => choosePromotion('queen')}>
+              <img src={getPlayingSide() === pieceSide.white ? whiteQueenImg : blackQueenImg} alt="queen"/>
+            </button>
+            <button className="promo-popup-button" onClick={() => choosePromotion('rook')}>
+              <img src={getPlayingSide() === pieceSide.white ? whiteRookImg : blackRookImg} alt="rook"/>
+            </button>
+            <button className="promo-popup-button" onClick={() => choosePromotion('bishop')}>
+              <img src={getPlayingSide() === pieceSide.white ? whiteBishopImg : blackBishopImg} alt="bishop"/>
+            </button>
+            <button className="promo-popup-button" onClick={() => choosePromotion('knight')}>
+              <img src={getPlayingSide() === pieceSide.white ? whiteKnightImg : blackKnightImg} alt="knight"/>
+            </button>
+          </div>
+        </div>
+      </div>
       <DndContext onDragEnd={handleDragEnd} collisionDetection={closestCorners}>
         <Game board={board} utils={utils}/>
       </DndContext>
@@ -240,29 +258,8 @@ function App() {
         <div className="timer-opponent">
           <Timer ref={opponentTimerRef} minutes={10} seconds={0} running={false}/>
         </div>
-        <div className="popup-wrapper" style={{display: showPromoPopup ? undefined : 'none'}}>
-          <div className="promo-popup-header">
-            <h1>Promote your pawn</h1>
-          </div>
-          <div className="promo-popup">
-            <div className="promo-popup-content">
-              <button className="promo-popup-button" onClick={() => choosePromotion('queen')}>
-                <img src={getPlayingSide() === pieceSide.white ? whiteQueenImg : blackQueenImg} alt="queen"/>
-              </button>
-              <button className="promo-popup-button" onClick={() => choosePromotion('rook')}>
-                <img src={getPlayingSide() === pieceSide.white ? whiteRookImg : blackRookImg} alt="rook"/>
-              </button>
-              <button className="promo-popup-button" onClick={() => choosePromotion('bishop')}>
-                <img src={getPlayingSide() === pieceSide.white ? whiteBishopImg : blackBishopImg} alt="bishop"/>
-              </button>
-              <button className="promo-popup-button" onClick={() => choosePromotion('knight')}>
-                <img src={getPlayingSide() === pieceSide.white ? whiteKnightImg : blackKnightImg} alt="knight"/>
-              </button>
-            </div>
-          </div>
-        </div>
         <div className="timer-self">
-          <Timer ref={selfTimerRef} minutes={10} seconds={0} running={true}/>
+          <Timer ref={selfTimerRef} minutes={10} seconds={0} running={status === gameStatus.running}/>
         </div>
       </div>
     </div>

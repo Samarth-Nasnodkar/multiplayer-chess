@@ -1,4 +1,5 @@
 enum gameStatus {
+  notStarted,
   running,
   checkmate,
   stalemate,
