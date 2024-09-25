@@ -1,3 +1,4 @@
+import isChecked from "./check";
 import pieceData from "./pieceData";
 import pieceSide from "./pieceSide";
 import tileData from "./tileData";
@@ -112,6 +113,8 @@ const checkMoveValidity = (board: string[][], active: pieceData, over: tileData)
       Math.abs(active.position.row - over.position.row) <= 1 
       && 
       Math.abs(active.position.col - over.position.col) <= 1
+      &&
+      !isChecked(8 - over.position.row, over.position.col - 1, board, active.side)
     );
   } else if (active.pieceType === 'knight') {
     return (
