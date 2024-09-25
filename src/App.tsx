@@ -42,7 +42,7 @@ function App() {
   const [playingSide, setPlayingSide] = useState(pieceSide.white);
   const [showPromoPopup, setShowPromoPopup] = useState(false);
   const [pawnPromotionLocation, setPawnPromotionLocation] = useState({row: -1, col: -1});
-  const [status, setStatus] = useState(gameStatus.running);
+  const [status, setStatus] = useState(gameStatus.notStarted);
   const opponentTimerRef = useRef<TimerHandle>(null);
   const selfTimerRef = useRef<TimerHandle>(null);
 
@@ -258,6 +258,22 @@ function App() {
         <div className="timer-opponent">
           <Timer ref={opponentTimerRef} minutes={10} seconds={0} running={false}/>
         </div>
+        <div className="button-container">
+          <button className="brutalist-button play-button button-1" onClick={() => {
+            setStatus(gameStatus.running);
+            selfTimerRef.current?.toggleTimer();
+          }}>
+            <div className="play-button-logo">
+            <svg className='play-button-icon' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#ECDFCC" id="play">
+              <path d="M7 17.259V6.741a1 1 0 0 1 1.504-.864l9.015 5.26a1 1 0 0 1 0 1.727l-9.015 5.259A1 1 0 0 1 7 17.259Z"></path>
+            </svg>
+            </div>
+            <div className="button-text">
+              <span>Start</span>
+            </div>
+          </button>
+        </div>
+
         <div className="timer-self">
           <Timer ref={selfTimerRef} minutes={10} seconds={0} running={status === gameStatus.running}/>
         </div>
