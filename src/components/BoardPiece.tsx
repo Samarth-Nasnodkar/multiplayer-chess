@@ -5,6 +5,7 @@ import { CSS } from '@dnd-kit/utilities';
 import pieceData from '../helpers/pieceData';
 import pieceSide from '../helpers/pieceSide';
 import gameStatus from '../helpers/gameStatus';
+import castlingState from '../helpers/castlingState';
 
 interface BoardPieceProps {
   id: string,
@@ -18,6 +19,7 @@ interface BoardPieceProps {
     rotatePlayingSide: () => void,
     getPlayingSide: () => pieceSide,
     getGameStaus: () => gameStatus,
+    getCastlingState: (side: pieceSide) => castlingState,
   }
 };
 

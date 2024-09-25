@@ -16,6 +16,8 @@ import blackBishopImg from './assets/images/pieces/bishop-b.svg';
 import blackRookImg from './assets/images/pieces/rook-b.svg';
 import blackKnightImg from './assets/images/pieces/knight-b.svg';
 import gameStatus from './helpers/gameStatus';
+import castlingState from './helpers/castlingState';
+import checkCastlingValidity from './helpers/castlingValidity';
 
 
 interface TimerHandle {
@@ -33,6 +35,9 @@ function App() {
     ['Pw', 'Pw', 'Pw', 'Pw', 'Pw', 'Pw', 'Pw', 'Pw'],
     ['Rw', 'Nw', 'Bw', 'Qw', 'Kw', 'Bw', 'Nw', 'Rw'],
   ]);
+
+  const [whiteCastlingState, setWhiteCastlingState] = useState(castlingState.both);
+  const [blackCastlingState, setBlackCastlingState] = useState(castlingState.both);
 
   const [playingSide, setPlayingSide] = useState(pieceSide.white);
   const [showPromoPopup, setShowPromoPopup] = useState(false);
@@ -79,6 +84,37 @@ function App() {
     return board[i][j];
   };
 
+  const getCastlingState = (side: pieceSide) => {
+    return side === pieceSide.white ? whiteCastlingState : blackCastlingState;
+  }
+
+  const updateCastlingState = (side: pieceSide, state: castlingState) => {
+    if (side === pieceSide.white) {
+      setWhiteCastlingState(state);
+    } else {
+      setBlackCastlingState(state);
+    }
+  }
+
+  const discardCastlingState = (side: pieceSide, state: castlingState) => {
+    console.log('discarding castling state');
+    if (state === castlingState.both) {
+      updateCastlingState(side, castlingState.none);
+    } else if (state === castlingState.kingSide) {
+      if (whiteCastlingState === castlingState.both) {
+        updateCastlingState(side, castlingState.queenSide);
+      } else {
+        updateCastlingState(side, castlingState.none);
+      }
+    } else if (state === castlingState.queenSide) {
+      if (whiteCastlingState === castlingState.both) {
+        updateCastlingState(side, castlingState.kingSide);
+      } else {
+        updateCastlingState(side, castlingState.none);
+      }
+    }
+  }
+
   const utils = {
     getColName,
     getRowName,
@@ -87,6 +123,7 @@ function App() {
     rotatePlayingSide,
     getPlayingSide,
     getGameStaus,
+    getCastlingState,
   };
 
   const handleDragEnd = (event: DragEndEvent) => {
@@ -94,12 +131,16 @@ function App() {
 
     if (active.id === over?.id) return;
     
+    const legalMove = checkMoveValidity(board, active.data.current?.value, over?.data.current?.value);
+    const castleMove = checkCastlingValidity(board, active.data.current?.value, over?.data.current?.value, whiteCastlingState, blackCastlingState);
     const isValidMove = (
       getGameStaus() === gameStatus.running
       &&
       getPlayingSide() === active?.data.current?.value.side 
       &&
-      checkMoveValidity(board, active.data.current?.value, over?.data.current?.value) 
+      (
+        legalMove || castleMove
+      )
       && 
       active?.data.current?.value.side !== getPieceSide(getPieceName(over?.id as number))
     );
@@ -116,9 +157,49 @@ function App() {
     const oj = overIndex % 8;
     const piece = newBoard[ai][aj];
 
+    if (castleMove) {
+      if (oi === 7) {
+        if (oj === 6) {
+          discardCastlingState(pieceSide.white, castlingState.both);
+          newBoard[7][5] = 'Rw';
+          newBoard[7][7] = '.';
+        } else if (oj === 2) {
+          discardCastlingState(pieceSide.white, castlingState.both);
+          newBoard[7][3] = 'Rw';
+          newBoard[7][0] = '.';
+        }
+      } else if (oi === 0) {
+        if (oj === 6) {
+          discardCastlingState(pieceSide.black, castlingState.both);
+          newBoard[0][5] = 'Rb';
+          newBoard[0][7] = '.';
+        } else if (oj === 2) {
+          discardCastlingState(pieceSide.black, castlingState.both);
+          newBoard[0][3] = 'Rb';
+          newBoard[0][0] = '.';
+        }
+      } else {
+        console.error('Invalid castle move');
+      }
+    }
+
     newBoard[ai][aj] = '.';
     newBoard[oi][oj] = piece;
     setBoard(newBoard);
+
+    if (ai === 0 && piece === 'Rb') {
+      discardCastlingState(pieceSide.black, castlingState.queenSide);
+    } else if (ai === 7 && piece === 'Rw') {
+      discardCastlingState(pieceSide.white, castlingState.queenSide);
+    } else if (ai === 0 && piece === 'Kb') {
+      discardCastlingState(pieceSide.black, castlingState.both);
+    } else if (ai === 7 && piece === 'Kw') {
+      discardCastlingState(pieceSide.white, castlingState.both);
+    } else if (ai === 0 && piece === 'Kb') {
+      discardCastlingState(pieceSide.black, castlingState.both);
+    } else if (ai === 7 && piece === 'Kw') {
+      discardCastlingState(pieceSide.white, castlingState.both);
+    }
 
     if (oi === 0 && piece[0] === 'P') {
       setPawnPromotionLocation({row: oi, col: oj});

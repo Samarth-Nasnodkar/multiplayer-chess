@@ -7,6 +7,8 @@ import checkMoveValidity from '../helpers/moveValidity';
 import pieceSide from '../helpers/pieceSide';
 import gameStatus from '../helpers/gameStatus';
 import isChecked from '../helpers/check';
+import castlingState from '../helpers/castlingState';
+import checkCastlingValidity from '../helpers/castlingValidity';
 
 interface BoardTileProps {
   id: number,
@@ -20,6 +22,7 @@ interface BoardTileProps {
     rotatePlayingSide: () => void,
     getPlayingSide: () => pieceSide,
     getGameStaus: () => gameStatus,
+    getCastlingState: (side: pieceSide) => castlingState,
   }
 };
 
@@ -74,7 +77,11 @@ const BoardTile = (props: BoardTileProps) => {
       &&
       props.utils.getPlayingSide() === active?.data.current?.value.side 
       && 
-      checkMoveValidity(props.board, active?.data.current?.value, overData) 
+      (
+        checkMoveValidity(props.board, active?.data.current?.value, overData)
+        ||
+        checkCastlingValidity(props.board, active?.data.current?.value, overData, props.utils.getCastlingState(pieceSide.white), props.utils.getCastlingState(pieceSide.black))
+      )
       && 
       active?.data.current?.value.side !== props.utils.getPieceSide(props.utils.getPieceName(props.id))
     );

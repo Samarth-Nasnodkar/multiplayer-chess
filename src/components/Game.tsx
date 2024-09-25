@@ -3,6 +3,7 @@ import '../styles/Game.css';
 import BoardTile from './BoardTile';
 import pieceSide from '../helpers/pieceSide';
 import gameStatus from '../helpers/gameStatus';
+import castlingState from '../helpers/castlingState';
 
 interface GameProps {
   board: string[][],
@@ -14,7 +15,7 @@ interface GameProps {
     rotatePlayingSide: () => void,
     getPlayingSide: () => pieceSide,
     getGameStaus: () => gameStatus,
-  }
+    getCastlingState: (side: pieceSide) => castlingState,  }
 };
 
 const Game = (props: GameProps) => {
