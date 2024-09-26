@@ -93,7 +93,7 @@ const BoardTile = (props: BoardTileProps) => {
     }
   }
   const style = {
-    border: isOver ? getTileHighlightColor() : undefined,
+    // border: isOver ? getTileHighlightColor() : undefined,
     backgroundColor: bgColor,
   };
   return (

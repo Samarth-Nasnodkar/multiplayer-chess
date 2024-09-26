@@ -39,6 +39,8 @@ function App() {
   const [whiteCastlingState, setWhiteCastlingState] = useState(castlingState.both);
   const [blackCastlingState, setBlackCastlingState] = useState(castlingState.both);
 
+  const [firstMovePlayed, setFirstMovePlayed] = useState(false);
+
   const [playingSide, setPlayingSide] = useState(pieceSide.white);
   const [showPromoPopup, setShowPromoPopup] = useState(false);
   const [pawnPromotionLocation, setPawnPromotionLocation] = useState({row: -1, col: -1});
@@ -46,13 +48,13 @@ function App() {
   const opponentTimerRef = useRef<TimerHandle>(null);
   const selfTimerRef = useRef<TimerHandle>(null);
 
-  const rotatePlayingSide = () => {
+  const rotatePlayingSide = (onlyOpponent = false) => {
     if (playingSide === pieceSide.white) {
       setPlayingSide(pieceSide.black);
     } else {
       setPlayingSide(pieceSide.white);
     }
-    selfTimerRef.current?.toggleTimer();
+    if (!onlyOpponent) selfTimerRef.current?.toggleTimer();
     opponentTimerRef.current?.toggleTimer();
     console.log("rotated side.");
   };
@@ -134,7 +136,15 @@ function App() {
     const legalMove = checkMoveValidity(board, active.data.current?.value, over?.data.current?.value);
     const castleMove = checkCastlingValidity(board, active.data.current?.value, over?.data.current?.value, whiteCastlingState, blackCastlingState);
     const isValidMove = (
-      getGameStaus() === gameStatus.running
+      (
+        getGameStaus() === gameStatus.running
+        ||
+        (
+          getGameStaus() === gameStatus.notStarted 
+          && 
+          !firstMovePlayed
+        )
+      )
       &&
       getPlayingSide() === active?.data.current?.value.side 
       &&
@@ -187,6 +197,14 @@ function App() {
     newBoard[oi][oj] = piece;
     setBoard(newBoard);
 
+    let onlyOpponent = false;
+    if (!firstMovePlayed && getGameStaus() === gameStatus.notStarted) {
+      setFirstMovePlayed(true);
+      setStatus(gameStatus.running);
+      onlyOpponent = true;
+      // selfTimerRef.current?.toggleTimer();
+    }
+
     if (ai === 0 && piece === 'Rb') {
       discardCastlingState(pieceSide.black, castlingState.queenSide);
     } else if (ai === 7 && piece === 'Rw') {
@@ -210,7 +228,7 @@ function App() {
       setShowPromoPopup(true);
       setStatus(gameStatus.paused);
     } else {
-      rotatePlayingSide();
+      rotatePlayingSide(onlyOpponent);
     }
   };
 
@@ -275,7 +293,7 @@ function App() {
         </div>
 
         <div className="timer-self">
-          <Timer ref={selfTimerRef} minutes={10} seconds={0} running={status === gameStatus.running}/>
+          <Timer ref={selfTimerRef} minutes={10} seconds={0} running={false}/>
         </div>
       </div>
     </div>

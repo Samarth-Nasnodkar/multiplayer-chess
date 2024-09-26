@@ -15,7 +15,8 @@ interface GameProps {
     rotatePlayingSide: () => void,
     getPlayingSide: () => pieceSide,
     getGameStaus: () => gameStatus,
-    getCastlingState: (side: pieceSide) => castlingState,  }
+    getCastlingState: (side: pieceSide) => castlingState,  
+  }
 };
 
 const Game = (props: GameProps) => {
