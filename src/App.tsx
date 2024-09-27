@@ -276,22 +276,43 @@ function App() {
         <div className="timer-opponent">
           <Timer ref={opponentTimerRef} minutes={10} seconds={0} running={false}/>
         </div>
-        <div className="button-container">
-          <button className="brutalist-button play-button button-1" onClick={() => {
-            setStatus(gameStatus.running);
-            selfTimerRef.current?.toggleTimer();
-          }}>
-            <div className="play-button-logo">
-            <svg className='play-button-icon' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#ECDFCC" id="play">
-              <path d="M7 17.259V6.741a1 1 0 0 1 1.504-.864l9.015 5.26a1 1 0 0 1 0 1.727l-9.015 5.259A1 1 0 0 1 7 17.259Z"></path>
-            </svg>
-            </div>
-            <div className="button-text">
-              <span>Start</span>
-            </div>
-          </button>
+        <div className="control-wrapper">
+          <div className="control-btns">
+            <button className="Btn" style={{display: 'none'}}>
+            
+              <div className="sign">
+                <svg viewBox="0 0 512 512">
+                  <path d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z">
+                  </path>
+                </svg>
+              </div>
+              <div className="text">Logout</div>
+            </button>
+            <button className="Btn">
+              <div className="sign">
+                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 6 7" id="play">
+                  <g fill="none" fill-rule="evenodd">
+                    <g fill="#000" transform="translate(-347 -3766)">
+                      <g transform="translate(56 160)">
+                        <path d="M296.495 3608.573l-3.994-2.43c-.669-.408-1.501.107-1.501.926v4.862c0 .82.832 1.333 1.5.927l3.995-2.43c.673-.41.673-1.445 0-1.855"></path>
+                      </g>
+                    </g>
+                  </g>
+                </svg>
+              </div>
+              <div className="text">Start</div>
+            </button>
+            <button className="Btn"  style={{display: 'none'}}>
+              <div className="sign">
+                <svg viewBox="0 0 512 512">
+                  <path d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z">
+                  </path>
+                </svg>
+              </div>
+              <div className="text">Logout</div>
+            </button>
+          </div>
         </div>
-
         <div className="timer-self">
           <Timer ref={selfTimerRef} minutes={10} seconds={0} running={false}/>
         </div>
